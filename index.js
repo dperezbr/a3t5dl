@@ -1,9 +1,12 @@
-const puppeteer = require('puppeteer');
+//const puppeteer = require('puppeteer');
 var path = require('path');
 const { exec, spawn } = require('child_process');
 const tele5 = require ('./scrappers/tele5');
 const a3 = require ('./scrappers/a3media'); 
 const Foo = require('./utils/chrome');
+const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+const puppeteer = require('puppeteer-extra')
+
 // var path = require('path');
 // if (process.pkg) {
 //   var puppeteer = require(path.resolve(process.cwd(), 'puppeteer'));
@@ -40,7 +43,7 @@ async function main(){
     var a3m = new a3();
 
     try {
-        
+        puppeteer.use(AdblockerPlugin());
         const browser = await puppeteer.launch({
             executablePath,
             headless: false,
@@ -61,6 +64,9 @@ async function main(){
 
           await page1.goto('https://www.telecinco.es/acorralados/acorralados-2011/galas-integras/4011208/');
           await page1.waitFor(4000);
+          await page1.addStyleTag({content: 'div[class*="adsInfo__"]{display: none !important}'})
+
+
 
           await page.setRequestInterception(true);
           await page1.setRequestInterception(true);
@@ -84,7 +90,9 @@ async function main(){
         //   await page.waitFor(4000);
       
 
-        //   browser.on('targetchanged', async function (target){
+          browser.on('targetchanged', async function (target){
+            await page1.addStyleTag({content: 'div[class*="adsInfo__"]{display: none !important}'})
+          });
         //     const npage = await target.page();
         //     //console.log(npage);
         //     if(!npage) return;
