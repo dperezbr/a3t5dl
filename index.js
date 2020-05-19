@@ -60,10 +60,9 @@ async function main(){
           const page1 = await browser.newPage();
       
           await page.goto('https://www.atresplayer.com');
-          await page.waitFor(4000);
-
           await page1.goto('https://www.telecinco.es/acorralados/acorralados-2011/galas-integras/4011208/');
           await page1.waitFor(4000);
+          await page.waitFor(4000);
           await page1.addStyleTag({content: 'div[class*="adsInfo__"]{display: none !important}'})
 
 
